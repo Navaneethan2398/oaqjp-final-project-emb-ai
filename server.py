@@ -1,23 +1,30 @@
+"""
+Server module for Emotion Detection application.
+Handles HTTP requests and returns formatted emotion analysis results.
+"""
+
 from flask import Flask, request
 from EmotionDetection import emotion_detector
 
 app = Flask(__name__)
 
+
 @app.route("/emotionDetector")
-def emotionDetector():
+def emotion_detector_route():
+    """
+    Flask route that analyzes emotion from user input text.
+    Returns formatted emotion scores and dominant emotion.
+    """
 
     text_to_analyze = request.args.get("textToAnalyze")
 
-    # Call emotion detector function
     response = emotion_detector(text_to_analyze)
 
-    # ERROR HANDLING FOR BLANK INPUT
     if response["dominant_emotion"] is None:
         return "Invalid text! Please try again!"
 
-    # Normal response
     return (
-        f"For the given statement, the system response is "
+        "For the given statement, the system response is "
         f"'anger': {response['anger']}, "
         f"'disgust': {response['disgust']}, "
         f"'fear': {response['fear']}, "
@@ -29,3 +36,4 @@ def emotionDetector():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+    
